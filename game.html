@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OI的痛苦测评游戏</title>
+    <link rel="stylesheet" href="./static/game.css">
+    <link rel="stylesheet" href="./static/vs.css">
+    <script src="./static/highlight.min.js"></script>
+    <script>
+        hljs.highlightAll();
+    </script>
+</head>
+
+<body>
+    <div id="game_start">
+        <div id="game_st_code">
+            <div id="game_st_c_nav">
+                <div id="game_st_c_n_o2">
+                    <input type="checkbox" id="">
+                    <label>开启厌O<sub>2</sub>模式</label>
+                </div>
+                <div id="game_st_c_n_run">提交评测</div>
+            </div>
+            <div id="game_st_c_warn">请注意自动识别语言暂不支持近日新加入的部分非传统语言。(包括胡言乱语)</div>
+            <div id="game_st_c_txt">
+                <div id="game_st_c_t_lnNum"></div>
+                <div id="game_st_c_t_code">
+                    <pre><code class="language-cpp">#include &lt;iostream&gt;
+using namespace std;
+int main(){
+    cout &lt;&lt; "God of CCF, I want to AC CSP-J and CSP-S, please help me." &lt;&lt; endl;
+    return 0;
+}</code></pre>
+                </div>
+            </div>
+        </div>
+        <div id="game_st_other">
+            <div id="game_st_title">OI的痛苦测评</div>
+            <div id="game_st_button">
+                <div id="game_st_info">i</div>
+                <div id="game_st_help">?</div>
+            </div>
+        </div>
+    </div>
+    <div class="window_masker"></div>
+    <div id="game_level" class="window">
+        <div class="window_back"></div>
+        <div id="game_l_sel" class="window_main"></div>
+    </div>
+    <div id="game_info" class="window">
+        <div class="window_back"></div>
+        <div class="window_main window_text">
+            <h1>关于OI的痛苦测评游戏</h1>
+            <p>这是一个普通的游戏，目的是通过拖放评测机旁边的状态块，从而确定<s>冤种</s>选手的答题状态。</p>
+            <p>这个游戏历时7天，终于完成了demo 1.0.0的版本，后面，我会不断完善此游戏，请多多期待吧</p>
+            <p>Github仓库: <a href="https://github.com/Idealwindow?tab=repositories" target="_blank">https://github.com/Idealwindow?tab=repositories</a></p>
+        </div>
+    </div>
+    <div id="game_help" class="window">
+        <div class="window_back"></div>
+        <div class="window_main window_text">
+            <h1>游戏玩法</h1>
+            <p>在游戏中，玩家（测评机）可以通过拖拽状态块来填充评测区块，并达到一定的目标（AC率，使用状态块块数）即可得到一定的分数（全通过为100，每完成一个目标50分，若区块未填充完整，分数均为0分）。</p>
+            <p style="color: red;">注意：隔墙不允许放置状态块</p>
+            <p>状态块：</p>
+            <p>AC（Accepted）填充所在方格位置为自身；</p>
+            <p>WA（Wrong Answer）填充所在方格位置为自身，并往八个方向延伸寻找最近的无隔墙的方格；</p>
+            <p>PE（Presentation Error）填充所在方格位置为自身</p>
+            <p>TLE（Time Limit Exceeded）填充所在方格位置为自身，并往八个方向延伸一格，形成3x3区间，无法穿过隔墙；</p>
+            <p>MLE（Memory Limit Exceeded）填充所在方格位置为自身，并往八个方向延伸一格，形成3x3区间，无法穿过隔墙；</p>
+            <p>OLE（Output Limit Exceeded）填充所在方格位置为自身，并往八个方向延伸一格，形成3x3区间，无法穿过隔墙；</p>
+            <p>RE（Runtime Error）填充所在方格位置为自身，并形成5x5区间，可以穿过隔墙，无法摧毁隔墙；</p>
+            <p>CE（Compile Error）填充所在方格位置为自身，并在隔墙阻挡的范围内全部填充自身，无法穿过隔墙；</p>
+            <p>UKE（Unknown Error）填充所在方格位置为自身，并往八个方向延伸一格，形成3x3区间，可摧毁隔墙并填充随机状态块；</p>
+            <p>状态块之间存在等级压制，压制顺序为AC &lt; WA &lt; PE &lt; TLE = MLE = OLE &lt; RE &lt; CE &lt; UKE，等级高的状态块可以压制等级低的状态块，反之则压制失败。</p>
+        </div>
+    </div>
+    <div id="game_main" class="">
+        <div id="game_m_back"></div>
+        <div id="game_m_reset">↺</div>
+        <div id="game_m_score">
+            状态块数:<div id="game_m_sc_stBlockNum">0</div>
+            AC率:<div id="game_m_sc_ac">0</div>
+            已填充区块:<div id="game_m_sc_fill"></div>
+        </div>
+        <div id="game_m_opi">
+            <table>
+
+            </table>
+        </div>
+        <div id="game_m_selMask"></div>
+        <div id="game_m_sel">
+            <div id="game_m_sl_ac" class="status_block" draggable="true" ondragstart="dragStart(event)">AC</div>
+            <div id="game_m_sl_wa" class="status_block" draggable="true" ondragstart="dragStart(event)">WA</div>
+            <div id="game_m_sl_re" class="status_block" draggable="true" ondragstart="dragStart(event)">RE</div>
+            <div id="game_m_sl_ce" class="status_block" draggable="true" ondragstart="dragStart(event)">CE</div>
+            <div id="game_m_sl_pe" class="status_block" draggable="true" ondragstart="dragStart(event)">PE</div>
+            <div id="game_m_sl_tle" class="status_block" draggable="true" ondragstart="dragStart(event)">TLE</div>
+            <div id="game_m_sl_mle" class="status_block" draggable="true" ondragstart="dragStart(event)">MLE</div>
+            <div id="game_m_sl_ole" class="status_block" draggable="true" ondragstart="dragStart(event)">OLE</div>
+            <div id="game_m_sl_uke" class="status_block" draggable="true" ondragstart="dragStart(event)">UKE</div>
+        </div>
+    </div>
+    <script src="./static/game.js"></script>
+</body>
+
+</html>
